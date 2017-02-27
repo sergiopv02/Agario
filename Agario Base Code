@@ -1,0 +1,181 @@
+
+from graphics import *
+from random import randint
+
+def Agario():
+    # Starting window
+    
+    # Background
+    area = GraphWin("Agario Game", 1440,790)
+    area.setBackground("black")
+    border = Rectangle(Point(8,8), Point(1430,780))
+    border.setOutline("purple")
+    border.setWidth(10)
+    border.draw(area)
+
+    # Variables
+    Player_One_Movement = 0
+    Player_Two_Movement = 0
+    Player_One_Speed = 10
+    Player_Two_Speed = 10
+    Player_One_Size = 30
+    Player_Two_Size = 30
+
+    # Tokens
+    pointA = randint(10,1430)
+    pointB = randint(50,780)
+    token = Circle(Point(pointA, pointB), randint(4, 5))
+    color = ["green", "yellow", "red", "blue", "purple"]
+    x = 0
+    token.setFill(color[x])
+    x += 1
+    token.draw(area)
+    count = 0
+    amount = 1
+
+    # Player One
+    onePointx = 440
+    onePointy = 395
+    radius_one = 15
+    player_one = Circle(Point(onePointx, onePointy), radius_one)
+    player_one.setFill("red")
+    player_one.draw(area)
+
+    # Player Two
+    twoPointx = 1000
+    twoPointy = 390
+    radius_two = 15
+    player_two = Circle(Point(twoPointx, twoPointy), radius_two)
+    player_two.setFill("blue")
+    player_two.draw(area)
+    
+
+    # Score
+    SizeOne = Text(Point(30,25), (Player_One_Size))
+    SizeTwo = Text(Point(1408,25), (Player_Two_Size))
+    SizeOne.setTextColor("White")
+    SizeTwo.setTextColor("White")
+    SizeOne.setSize(18)
+    SizeTwo.setSize(18)
+    SizeOne.draw(area)
+    SizeTwo.draw(area)
+
+    # Athetics
+    barrier = Line(Point(13,40), Point(1424,40))
+    barrier.setFill("white")
+    barrier.setWidth("5")
+    barrier.draw(area)
+    
+    while 1:
+        key_press = area.checkKey()
+        
+        # Checks if not on wall
+        if (onePointx < 10):
+            player_one.move(Player_One_Speed,0)
+            onePointx += Player_One_Speed
+            Player_One_Movement = 0
+        if (twoPointx < 10):
+            player_two.move(Player_Two_Speed,0)
+            twoPointx += Player_Two_Speed
+            Player_Two_Movement = 0
+        if (1430 < onePointx):
+            player_one.move(-Player_One_Speed,0)
+            onePointx -= Player_One_Speed
+            Player_One_Movement = 0
+        if (1430 < twoPointx):
+            player_two.move(-Player_Two_Speed,0)
+            twoPointx -= Player_Two_Speed
+            Player_Two_Movement = 0
+        if (onePointy < 50):
+            player_one.move(0,Player_One_Speed)
+            onePointy += Player_One_Speed
+            Player_One_Movement = 0
+        if (twoPointy < 50 ):
+            player_two.move(0,Player_Two_Speed)
+            twoPointy += Player_Two_Speed
+            Player_Two_Movement = 0
+        if (780 < onePointy):
+            player_one.move(0,-Player_One_Speed)
+            onePointy -= Player_One_Speed
+            Player_One_Movement = 0
+        if (780 < twoPointy):
+            player_two.move(0,-Player_Two_Speed)
+            twoPointy -= Player_Two_Speed
+            Player_Two_Movement = 0
+            
+        # Player one momvement 
+        if key_press == "d":
+            Player_One_Movement = 1
+        if Player_One_Movement == 1:
+            player_one.move(Player_One_Speed,0)
+            onePointx += Player_One_Speed
+        if key_press == "a":
+            Player_One_Movement = 2
+        if Player_One_Movement == 2:
+            player_one.move(-Player_One_Speed,0)
+            onePointx -= Player_One_Speed
+        if key_press == "w":
+            Player_One_Movement = 3
+        if Player_One_Movement == 3:
+            player_one.move(0,-Player_One_Speed)
+            onePointy -= Player_One_Speed
+        if key_press == "s":
+            Player_One_Movement = 4
+        if Player_One_Movement == 4:
+            player_one.move(0,Player_One_Speed)
+            onePointy += Player_One_Speed
+        if key_press == "q":
+            Player_One_Movement = 5
+        if Player_One_Movement == 5:
+            player_one.move(0,0)
+            
+        # Player two movement
+        if key_press == "Right":
+            Player_Two_Movement = 1
+        if Player_Two_Movement == 1:
+            player_two.move(Player_Two_Speed,0)
+            twoPointx += Player_Two_Speed
+        if key_press == "Left":
+            Player_Two_Movement = 2
+        if Player_Two_Movement == 2:
+            player_two.move(-Player_Two_Speed,0)
+            twoPointx -= Player_Two_Speed
+        if key_press == "Up":
+            Player_Two_Movement = 3
+        if Player_Two_Movement == 3:
+            player_two.move(0,-Player_Two_Speed)
+            twoPointy -= Player_Two_Speed
+        if key_press == "Down":
+            Player_Two_Movement = 4
+        if Player_Two_Movement == 4:
+            player_two.move(0,Player_Two_Speed)
+            twoPointy += Player_Two_Speed
+        if key_press == "/":
+            Player_Two_Movement = 5
+        if Player_Two_Movement == 5:
+            player_two.move(0,0)
+
+        # Adds tokens
+        if amount < 101:
+            if count % 2 == 0:
+                if (0 < Player_One_Movement) or (0 < Player_Two_Movement):
+                    x = randint(30,1410)
+                    y = randint(70,750)
+                    token = Circle(Point(x, y), randint(4, 5))
+                    color = ["green", "yellow", "red", "blue", "purple"]
+                    if x > len(color):
+                        x = 0
+                    token.setFill(color[x])
+                    token.draw(area)
+                    amount += 1
+
+        x += 1
+        count += .5
+
+
+            
+    
+Agario()
+
+
+
