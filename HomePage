@@ -1,0 +1,8 @@
+    Home = GraphWin(("Home"), 1440, 790)    
+    Home.setBackground("black")
+    Play_Button = Circle(Point(720, 395), 50)
+    Play_Button.setFill('White')
+    PlayText = Text(Point(720, 395), 'Play')
+    PlayText.setSize(30)
+    Play_Button.draw(Home)
+    PlayText.drawaw(Home)
