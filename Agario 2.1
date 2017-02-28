@@ -1,0 +1,240 @@
+
+from graphics import *
+from random import randint
+
+def Agario():
+
+    # Background
+    Area = GraphWin("Agario Game", 1440, 790)
+    Area.setBackground("black")
+
+    # Variables
+    Player_One_Operating = 0
+    Player_Two_Operating = 0
+    Player_One_Speed = 10
+    Player_Two_Speed = 10
+    Player_One_Score = 0
+    Player_Two_Score = 0
+
+    # Tokens
+    Token_X_List_One = []
+    Token_Y_List_One = []
+    Token_X_List_Two = []
+    Token_Y_List_Two = []
+    Token_List = []
+    Token_Amount = 0
+
+    # Player One
+    Player_One_X = 440
+    Player_One_Y = 390
+    Player_One_Size = 15
+    Player_One = Circle(Point(Player_One_X, Player_One_Y), Player_One_Size)
+    Player_One.setFill("red")
+    Player_One.draw(Area)
+    
+    # Player Two
+    Player_Two_X = 1000
+    Player_Two_Y = 390
+    Player_Two_Size = 15
+    Player_Two = Circle(Point(Player_Two_X, Player_Two_Y), Player_Two_Size)
+    Player_Two.setFill("blue")
+    Player_Two.draw(Area)
+
+    # Score Board
+    Player_One_Text = Text(Point(30, 20), (Player_One_Score))
+    Player_Two_Text = Text(Point(1408, 20), (Player_Two_Score))
+    Player_One_Text.setTextColor("white")
+    Player_Two_Text.setTextColor("white")
+    Player_One_Text.setSize(18)
+    Player_Two_Text.setSize(18)
+    Score_Barrier = Line(Point(0, 40), Point(1440, 40))
+    Score_Barrier.setFill("white")
+    Score_Barrier.setWidth("5")
+    Score_Background = Rectangle(Point(0, 0), Point(1440, 38))
+    Score_Background.setFill("black")
+    Score_Background.draw(Area)
+    Score_Barrier.draw(Area)
+    Player_One_Text.draw(Area)
+    Player_Two_Text.draw(Area)
+
+    
+    while True:
+        key_press = Area.checkKey()
+        # Randomly places token
+        if Token_Amount < 1:
+            Token = Circle(Point(randint(30,1410), randint(70,750)), 5)
+            Token.setFill("green")
+            Token_Center = Token.getCenter()
+            Token_X = Token_Center.getX()
+            Token_Y = Token_Center.getY()
+            Token_Amount += 1
+            Token.draw(Area)
+            Token_List.append(Token)
+            
+            
+        # Controlls the border
+        if (Player_One_X < 0):
+            Player_One.move(Player_One_Speed, 0)
+            Player_One_X += Player_One_Speed
+            Player_One_Operating = 0
+        if (Player_Two_X < 0):
+            Player_Two.move(Player_Two_Speed, 0)
+            Player_Two_X += Player_Two_Speed
+            Player_Two_Operating = 0
+        if (Player_One_X > 1440):
+            Player_One.move(-Player_One_Speed, 0)
+            Player_One_X -= Player_One_Speed
+            Player_One_Operating = 0
+        if (Player_Two_X > 1440):
+            Player_Two.move(-Player_Two_Speed, 0)
+            Player_Two_X -= Player_Two_Speed
+            Player_Two_Operating = 0
+        if (Player_One_Y < 40):
+            Player_One.move(0, Player_One_Speed)
+            Player_One_Y += Player_One_Speed
+            Player_One_Operating = 0
+        if (Player_Two_Y < 40):
+            Player_Two.move(0, Player_Two_Speed)
+            Player_Two_Y += Player_Two_Speed
+            Player_Two_Operating = 0
+        if (Player_One_Y > 790):
+            Player_One.move(0, -Player_One_Speed)
+            Player_One_Y -= Player_One_Speed
+            Player_One_Operating = 0
+        if (Player_Two_Y > 790):
+            Player_Two.move(0, -Player_Two_Speed)
+            Player_Two_Y -= Player_Two_Speed
+            Player_Two_Operating = 0
+
+        # Player one momvement 
+        if key_press == "d":
+            Player_One_Operating = 1
+        if Player_One_Operating == 1:
+            Player_One.move(Player_One_Speed,0)
+            Player_One_X += Player_One_Speed
+        if key_press == "a":
+            Player_One_Operating = 2
+        if Player_One_Operating == 2:
+            Player_One.move(-Player_One_Speed,0)
+            Player_One_X -= Player_One_Speed
+        if key_press == "w":
+            Player_One_Operating = 3
+        if Player_One_Operating == 3:
+            Player_One.move(0,-Player_One_Speed)
+            Player_One_Y -= Player_One_Speed
+        if key_press == "s":
+            Player_One_Operating = 4
+        if Player_One_Operating == 4:
+            Player_One.move(0,Player_One_Speed)
+            Player_One_Y += Player_One_Speed
+        if key_press == "q":
+            Player_One_Operating = 5
+        if Player_One_Operating == 5:
+            Player_One.move(0,0)
+            
+        # Player two movement
+        if key_press == "Right":
+            Player_Two_Operating = 1
+        if Player_Two_Operating == 1:
+            Player_Two.move(Player_Two_Speed,0)
+            Player_Two_X += Player_Two_Speed
+        if key_press == "Left":
+            Player_Two_Operating = 2
+        if Player_Two_Operating == 2:
+            Player_Two.move(-Player_Two_Speed,0)
+            Player_Two_X -= Player_Two_Speed
+        if key_press == "Up":
+            Player_Two_Operating = 3
+        if Player_Two_Operating == 3:
+            Player_Two.move(0,-Player_Two_Speed)
+            Player_Two_Y -= Player_Two_Speed
+        if key_press == "Down":
+            Player_Two_Operating = 4
+        if Player_Two_Operating == 4:
+            Player_Two.move(0,Player_Two_Speed)
+            Player_Two_Y += Player_Two_Speed
+        if key_press == "l":
+            Player_Two_Operating = 5
+        if Player_Two_Operating == 5:
+            Player_Two.move(0,0)
+
+        x = 0
+        # Checks if token touched
+        for token in Token_List:
+            if Token_X - Player_One_Size < Player_One_X < Token_X + Player_One_Size and Token_Y - Player_One_Size < Player_One_Y < Token_Y + Player_One_Size:
+                Player_One.undraw()
+                Token_List[x].undraw()
+                Token_List.remove(Token_List[x])
+                # Player Rebuilding
+                Player_One_Size += 3
+                Player_One_Score += 1
+                Player_One = Circle(Point(Player_One_X, Player_One_Y), Player_One_Size)
+                Player_One.setFill("red")
+                Player_One.draw(Area)
+                # Score Board
+                Score_Background.undraw()
+                Score_Barrier.undraw()
+                Player_One_Text.undraw()
+                Player_Two_Text.undraw()
+                Player_One_Text = Text(Point(30, 20), (Player_One_Score))
+                Player_Two_Text = Text(Point(1408, 20), (Player_Two_Score))
+                Player_One_Text.setTextColor("white")
+                Player_Two_Text.setTextColor("white")
+                Player_One_Text.setSize(18)
+                Player_Two_Text.setSize(18) 
+                Score_Background.draw(Area)
+                Score_Barrier.draw(Area)
+                Player_One_Text.draw(Area)
+                Player_Two_Text.draw(Area)
+                # Player Variable
+                Player_One_Speed = Player_One_Speed / 1.1
+                Token_Amount -= 1
+            if Token_X - Player_Two_Size < Player_Two_X < Token_X + Player_Two_Size and Token_Y - Player_Two_Size < Player_Two_Y < Token_Y + Player_Two_Size:
+                Player_Two.undraw()
+                Token_List[x].undraw()
+                Token_List.remove(Token_List[x])
+                # Player Rebuilding
+                Player_Two_Size += 3
+                Player_Two_Score += 1
+                Player_Two = Circle(Point(Player_Two_X, Player_Two_Y), Player_Two_Size)
+                Player_Two.setFill("blue")
+                Player_Two.draw(Area)
+                # Score Board
+                Score_Background.undraw()
+                Score_Barrier.undraw()
+                Player_One_Text.undraw()
+                Player_Two_Text.undraw()
+                Player_One_Text = Text(Point(30, 20), (Player_One_Score))
+                Player_Two_Text = Text(Point(1408, 20), (Player_Two_Score))
+                Player_One_Text.setTextColor("white")
+                Player_Two_Text.setTextColor("white")
+                Player_One_Text.setSize(18)
+                Player_Two_Text.setSize(18) 
+                Score_Background.draw(Area)
+                Score_Barrier.draw(Area)
+                Player_One_Text.draw(Area)
+                Player_Two_Text.draw(Area)
+                # Player Variable
+                Player_Two_Speed = Player_Two_Speed / 1.1
+                Token_Amount -= 1
+            x += 1
+    
+            
+        if Player_Two_Size > Player_One_Size:
+            if Player_Two_X - (Player_One_Size/2) < Player_One_X < Player_Two_X + (Player_One_Size/2) and Player_Two_Y - (Player_One_Size/2) < Player_One_Y < Player_Two_Y + (Player_One_Size/2):
+                Area.close()
+        if Player_One_Size > Player_Two_Size:
+            if Player_One_X - (Player_Two_Size/2) < Player_Two_X < Player_One_X + (Player_Two_Size/2) and Player_One_Y - (Player_Two_Size/2) < Player_Two_Y < Player_One_Y + (Player_Two_Size/2):
+                Area.close()
+           
+
+Agario()
+
+
+
+
+
+    
+
+
+    
